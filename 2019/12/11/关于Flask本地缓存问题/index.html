@@ -14,7 +14,7 @@
 
 
 
-<title>迁移至Hexo | Core Dumped</title>
+<title>关于Flask缓存问题 | Core Dumped</title>
 
 
 
@@ -114,7 +114,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">迁移至Hexo</h1>
+            <h1 class="post-title">关于Flask缓存问题</h1>
             
                 <div class="post-meta">
                     
@@ -123,25 +123,28 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">December 10, 2019&nbsp;&nbsp;19:30:10</a>
+                        Date: <a href="#">December 11, 2019&nbsp;&nbsp;21:44:06</a>
                         </span>
                     
-                    
-                        <span class="post-category">
-                    Category:
-                            
-                                <a href="/categories/Log/">Log</a>
-                            
-                        </span>
                     
                 </div>
             
         </header>
 
         <div class="post-content">
-            <p>实在是懒得手敲前端了……<del>(其实是失去了全栈的梦想)</del>于是改用Hexo了。</p>
-<p>旧的网站放在服务器的tomcat上了，留个念想。<br><strong>—&gt;<a href="http://123.57.209.97:8080/Tab/" target="_blank" rel="noopener">Tab</a>&lt;—</strong></p>
-<p>我还蛮喜欢这个前端的，<del>虽然模板不是我自己手敲出来的</del>（小声）<br><img src="https://i.loli.net/2019/12/10/qCVyd6a3JBWmvb1.png" alt="Tab"></p>
+            <p>最近写大作业需要用到Flask框架，但使用时发现一个致命问题。</p>
+<p>起因是我在修改css文件后，重新运行项目，发现前端并没有更改。</p>
+<p>原因是在编写前端时，通常会把图片、css、js等文件放在static文件夹下。但这同时也导致了一个问题：在浏览器加载网页时，会留有一份缓存。当重新运行项目，浏览器并没有向后台请求新的样式文件，而是直接加载的缓存。</p>
+<p>正常人最初的想法肯定都是把浏览器缓存关掉。但不知为何，我的小chrome不吃这套（摊手。而且把浏览器缓存关掉也不是一个明智的选择。</p>
+<p>之后浏览了不少的博客，大多数给出的方法是更改flask的缓存机制，flask配置文件中默认的缓存有效时间是12h。然而直接更改flask设置并不是一个合适的方法。有的博客给出了在项目中的python中的文件中进行此项设置的更改。然而我的小项目也不吃这套（再次摊手。</p>
+<p>无奈之下，只能改用最笨的方法：既然浏览器不对后台进行请求，那就让他强行请求就好了。</p>
+<p>于是，在html文件中引入css时，采用了这种方式：</p>
+<pre><code>&lt;link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css', v=0.0129)}}" /&gt;</code></pre>
+<p>每次更改样式文件后，手动更改一下版本号，这样浏览器发现版本号对不上后就会重新请求一份。<del>我承认这个方法很笨，但真的立竿见影</del></p>
+<p><strong>但是</strong></p>
+<p>对于某些动态生成并保存的文件（例如图片），为了方便每次生成的图片都采用同一个名称，这样后台下的文件就会自动覆盖。但这样又导致了缓存问题，对，我的图片一直显示的是第一张。</p>
+<p>目前我想到的办法就只有更改每次生成图片的文件名（叹息。为了防止名称重复又触发缓存问题，每个文件使用一个哈希值作为名称，这样能适当减小冲突几率（大概吧。不巧的是，这样又导致了后台文件冗余的问题（再次叹气，但这对于我这个小项目来说确实不是什么大问题（自欺欺人中。</p>
+<p><strong>果然，笨方法永远是最好用的。</strong></p>
 
         </div>
 
@@ -165,7 +168,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/Blog/"># Blog</a>
+                        <a href="/tags/python/"># python</a>
                     
                         
                 </span>
@@ -178,10 +181,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/12/11/%E5%85%B3%E4%BA%8EFlask%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98/">关于Flask缓存问题</a>
             
-            
-            <a class="next" rel="next" href="/2019/12/09/hello-world/">Hello World</a>
+            <a class="next" rel="next" href="/2019/12/10/%E8%BF%81%E7%A7%BB%E8%87%B3Hexo/">迁移至Hexo</a>
             
         </section>
 
