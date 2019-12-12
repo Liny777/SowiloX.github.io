@@ -153,6 +153,11 @@
                 
                 
                 
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
                 
                      <p class="copyright-item">
                          <span>Slogan:</span>
@@ -181,10 +186,39 @@
         </section>
         <section class="post-nav">
             
+                <a class="prev" rel="prev" href="/2019/12/12/%E6%B7%BB%E5%8A%A0Valine%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD/">添加Valine评论功能</a>
+            
             
             <a class="next" rel="next" href="/2019/12/10/%E8%BF%81%E7%A7%BB%E8%87%B3Hexo/">迁移至Hexo</a>
             
         </section>
+
+        <section>
+            
+            <section id="comments" class="comments">
+              <style>
+                .comments{margin:30px;padding:10px;background:#fff}
+                @media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#fff}}
+              </style>
+              <div class="valine_comment"></div>
+<!--载入js，在</body>之前插入即可-->
+<!--Leancloud 操作库:-->
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<!--Valine 的核心代码库-->
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+      el: '.valine_comment',
+      app_id: 'ei0E99RKPlTDPgFvP8bigWOs-gzGzoHsz',
+      app_key: 'dSQ1swGyv6zP4nySG1330mRF',
+      placeholder: '欢迎留言',
+      notify: 'true',
+      verify: 'true',
+    });
+</script>
+            </section>
+        
+    </section>
 
 
     </article>
