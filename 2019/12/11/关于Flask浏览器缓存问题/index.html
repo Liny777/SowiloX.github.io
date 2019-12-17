@@ -153,7 +153,7 @@
 <p>例如我加载本地的图片时，可采用以下方式引入时间戳：</p>
 <pre><code>
     path = "static/wordcloud.png?timestamp="+new Date().getTime(); //在图片路径后加入时间戳
-    html = '<img src="'+path+'" alt="wordcloud"/>';
+    html = '&lt;img src="'+path+'" alt="wordcloud"/&gt;';
 </code></pre>
 
 <p><del>我承认这个方法很笨，但真的立竿见影</del></p>
