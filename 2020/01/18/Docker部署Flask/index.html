@@ -14,7 +14,7 @@
 
 
 
-<title>添加Valine评论功能 | Core Dumped</title>
+<title>Docker部署Flask | Core Dumped</title>
 
 
 
@@ -176,7 +176,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">添加Valine评论功能</h1>
+            <h1 class="post-title">Docker部署Flask</h1>
             
                 <div class="post-meta">
                     
@@ -185,14 +185,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">December 12, 2019&nbsp;&nbsp;21:45:25</a>
+                        Date: <a href="#">January 18, 2020&nbsp;&nbsp;20:35:41</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/Log/">Log</a>
+                                <a href="/categories/%E5%89%8D%E5%90%8E%E7%AB%AF/">前后端</a>
                             
                         </span>
                     
@@ -201,56 +201,60 @@
         </header>
 
         <div class="post-content">
-            <p>想着给自己博客加个评论功能，奈何主题作者没有给出设置选项，只能自己摸索着配置。</p>
-<p>此评论功能采用的是<a href="https://valine.js.org/" target="_blank" rel="noopener">Valine</a>。<del>虽然我更喜欢来必应</del></p>
-<h2 id="注册LeanCloud"><a href="#注册LeanCloud" class="headerlink" title="注册LeanCloud"></a>注册LeanCloud</h2><p>首先需要注册一个<a href="https://leancloud.cn/dashboard/login.html#/signup" target="_blank" rel="noopener">LeanCloud</a>账号。随便添加一个应用后，可在设置中查看AppID和AppKey。</p>
-<h2 id="添加配置"><a href="#添加配置" class="headerlink" title="添加配置"></a>添加配置</h2><p>打开themes中的_config.yml文件，添加Valine相关配置：</p>
-<pre><code>valine:
-    appid:  #你的AppId
-    appkey:  #你的AppKey
-    verify: true #验证码
-    notify: true #评论回复提醒
-    placeholder: 欢迎留言 #评论框占位符
+            <p>最近闲得想把flask项目部署到服务器上，参考了<a href="https://dormousehole.readthedocs.io/en/latest/deploying/index.html" target="_blank" rel="noopener">官方文档</a>后，最初选择的是Apache的httpd+mod_wsgi。但apache的配置实在是过于繁琐，各种错误频频发生。尽管通过参考一些网上的资料排除了许多故障，但最后的404问题实在不知道怎么解决。之后转战uWSGI+nginx，但最后的nginx error实在是让我束手无策…… httpd和nginx的错误日志里也没有显示什么，项目在开发环境中也没有问题……所以干脆放弃了，改用了Docker。</p>
+<h2 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h2><p>这点就不用详细说明什么了，正常安装就可以了。</p>
+<pre><code>$ yum install docker</code></pre>
+
+<h2 id="Gunicorn-Gevent"><a href="#Gunicorn-Gevent" class="headerlink" title="Gunicorn + Gevent"></a>Gunicorn + Gevent</h2><p>由于flask是一个基于wsgi标准的python应用，app.run()这类方法只可以在开发环境下使用，也就是说，flask项目不可以独立运行，需要其他中间件来提供web服务器功能。此处使用的是Gunicorn。为了弥补并发量，采用Gevent。Gevent能够提供对于协程的支持。</p>
+<p>Gunicorn和Gevent需要使用pip进行安装</p>
+<pre><code>$ pip install gunicorn gevent</code></pre>
+<p>可见，两者是python的第三方库，所以此处安装只是为了后面测试用。Docker build镜像的时候还需要另作安装。</p>
+<h2 id="相关配置"><a href="#相关配置" class="headerlink" title="相关配置"></a>相关配置</h2><p>在项目文件夹下新建gunicorn.conf.py配置文件</p>
+<pre><code>workers = 5   #定义处理的进程数量，可根据需求自行定义
+worker_class = "gevent"
+bind = "0.0.0.0:5000"   #端口号可自行定义
 </code></pre>
 
-<h2 id="创建ejs文件"><a href="#创建ejs文件" class="headerlink" title="创建ejs文件"></a>创建ejs文件</h2><p>在/layout/_plugins文件夹下创建名为valine.ejs的文件，并写入下面的代码：</p>
-<pre><code>&lt;div class="valine_comment"&gt;&lt;/div&gt;
-&lt;!--Leancloud 操作库:-->
-&lt;script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js">&lt;/script&gt;
-<!--Valine 的核心代码库-->
-&lt;script src="//unpkg.com/valine/dist/Valine.min.js">&lt;/script&gt;
-&lt;script&gt;
-  new Valine({
-      el: '.valine_comment',
-      app_id: '<%= theme.valine.appid %>',
-      app_key: '<%= theme.valine.appkey %>',
-      placeholder: '<%= theme.valine.placeholder %>',
-      notify: '<%= theme.valine.notify %>',
-      verify: '<%= theme.valine.verify %>',
-    });
-&lt;/script&gt;
+<p>通过下面的命令来进行测试</p>
+<pre><code>gunicorn your_startup_file:app -c gunicorn.conf.py</pre></code>
+<p>其中your_startup_file为flask项目的运行文件，例如，项目中的python启动文件为app.py，此处就改为app。</p>
+<p>在项目文件夹下创建一个文本文档，用来存储项目需要的依赖包，以便Docker在build的时候知道需要安装哪些库。此处我命名为packages.txt。</p>
+<pre><code>$ vi packages.txt</code></pre>
+<p>打开后，根据个人需求写下项目需要的依赖包。</p>
+<pre><code>gunicorn
+gevent
+flask
+flask_cors
+tensorflow
+...
 </code></pre>
 
-<h2 id="添加调用Valine代码"><a href="#添加调用Valine代码" class="headerlink" title="添加调用Valine代码"></a>添加调用Valine代码</h2><p>之后需要在相应的生成文章样式的ejs代码中添加调用代码，主题不同位置也会有所不同，我的主题是在layout/_page/post.ejs中添加：</p>
-<pre><code>&lt;section&gt;
-            &lt;% if (theme.valine && theme.valine.appid && theme.valine.appkey){ %&gt;
-            &lt;section id="comments" class="comments"&gt;
-              &lt;style&gt;
-                .comments{margin:30px;padding:10px;background:#fff}
-                @media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#fff}}
-              &lt;/style&gt;
-              &lt;%- partial('_plugins/valine', {
-                key: post.slug,
-                title: post.title,
-                url: config.url+url_for(post.path)
-              }) %&gt;
-            &lt;/section&gt;
-        &lt;% } %&gt;
-&lt;/section&gt;
+<p>之后，创建一个Dockerfile文件，指导Docker进行镜像的构建。</p>
+<pre><code>$ vi Dockerfile</code></pre>
+<p>以下是Dockerfile的内容：</p>
+<pre><code>FROM python:3.6
+WORKDIR the/path/to/your/application
+
+COPY requirements.txt ./
+RUN pip install -r packages.txt
+
+COPY . .
+
+CMD ["gunicorn", "your_startup_file:app", "-c", "./gunicorn.conf.py"]
 </code></pre>
+<p>其中第二行为访问项目文件夹的绝对路径。最后一行的your_startup_file为flask项目的运行文件。第四行是告诉docker执行<code>pip install -r packages.txt</code>来进行依赖包的安装，根据需求可在后面添加安装源。例如添加清华源：<pre><code>pip install -r packages.txt -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple" target="_blank" rel="noopener">https://pypi.tuna.tsinghua.edu.cn/simple</a></pre></code></p>
+<h2 id="创建镜像"><a href="#创建镜像" class="headerlink" title="创建镜像"></a>创建镜像</h2><p>上述步骤完成后，即可开始构建镜像</p>
+<pre><code>$ docker build '/the/path/to/your/application'</pre></code>
 
-<p>之后就可以部署进行测试了。</p>
+<p>build需要一定的时间，完成后，可通过以下命令来查看镜像ID：</p>
+<pre><code>$ docker images</pre></code>
 
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><p>最后一步就很简单了，直接全部扔给docker就可以了。<br>使用Docker以daemon方式在生产环境中运行：</p>
+<pre><code>$ docker run -d -p 5000:5000 --name any_name your_image_ID</pre></code>
+<p>其中5000:5000为运行的端口号，可自行定义。</p>
+<p>一切完成后，flask项目就可正常访问了。</p>
+<p></br></br></br></p>
+<center>Docker真是个好用的东西</center>
         </div>
 
         
@@ -278,7 +282,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/log/"># log</a>
+                        <a href="/tags/Flask/"># Flask</a>
                     
                         
                 </span>
@@ -291,10 +295,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/01/01/%E6%96%B0%E5%B9%B4%E5%BF%AB%E4%B9%90/">新年快乐</a>
             
-            
-            <a class="next" rel="next" href="/2019/12/11/%E5%85%B3%E4%BA%8EFlask%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98/">关于Flask浏览器缓存问题</a>
+            <a class="next" rel="next" href="/2020/01/01/%E6%96%B0%E5%B9%B4%E5%BF%AB%E4%B9%90/">新年快乐</a>
             
         </section>
 
