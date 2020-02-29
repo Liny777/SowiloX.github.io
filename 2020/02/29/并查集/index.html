@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="S.X.">
+
+
+    <meta name="subtitle" content="Core Dumped">
+
+
+
+
+<title>并查集 | Core Dumped</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+<meta name="generator" content="Hexo 4.1.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">吐核</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">吐核</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">并查集</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">S.X.</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 29, 2020&nbsp;&nbsp;20:46:23</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>今天给朋友找资料时，无意中翻出了当年写的Kruskal算法的实现代码。<del>说实话现在看当年的代码已经看不懂了。</del>其中在判断选边之后会不会形成闭环回路时，用到了并查集，因为当时是现用现学的，所以还是有些生疏，今天又拿出来翻了翻。说真的，这个结构以及算法是真的简洁实用。</p>
+<h2 id="普通并查集"><a href="#普通并查集" class="headerlink" title="普通并查集"></a>普通并查集</h2><p>并查集，说白了就是一个数组（也可以是链表，但明显数组写起来更简洁），其内部元素构成一种树形结构。它可以用来判断两个元素是否属于同一个集合。那么如何判断？</p>
+<p><img src="https://i.loli.net/2020/02/29/P4EIG1zMUfToHND.png" alt="disjoint1.png"><br>如图可见，有三个集合（3个树），他们根分别是1，6和8。现在我要判断元素3和元素7是不是在一个集合内，我们只要分别的追溯出他们的根节点，判断他们的根节点是否一致。若一致，则处在一个集合内；若不一致，则不在一个集合内。很显然，对于元素3，其根节点为1；对于元素7，其根节点为6。那么3和7就不在一个集合内。</p>
+<p>思想很简单，但最后终归要落实在代码上。为了方便操作，我们让并查集对应的数组满足一定的性质：数组下标i表示集合中的元素i，数组中第i个元素表示集合中元素i的父节点，根节点的父节点为它本身。例如：S[7]=6表示集合中的元素7的父节点为元素6；S[6]=6表示集合中的元素6的父节点为元素6自身，这表明6为根节点。</p>
+<p>以上图中最左面的集合为例，在数组中它表示为：S[1]=1, S[2]=1, S[3]=2, S[4]=3, S[5]=3。</p>
+<p>那么，对于查找根节点的操作，可以用下面的Find函数来实现：</p>
+<pre><code>SetType Find(SetType X)
+{
+    if (S[X] == X)
+        return X;   //若是根节点，返回
+    else
+        return Find(S[X]); //若不是根节点，递归寻找
+}</code></pre>
+
+<p>对于合并操作的代码：</p>
+<pre><code>void SetUnion(SetType Root1, SetType Root2)
+{
+    if (S[Root2] ！= S[Root1])
+        S[Root2] = Root1;
+}</code></pre>
+
+<h2 id="按秩优化"><a href="#按秩优化" class="headerlink" title="按秩优化"></a>按秩优化</h2><p>最简单的并查集很好实现。原理可能有些不容易懂，但代码很简洁。<del>实在不行就背</del><br>但上述代码实现可能会造成一个问题，就是所有节点都集中在树的一侧：<br><img src="https://i.loli.net/2020/02/29/XZPFTeMfdbyGNck.png" alt="disjoint2.png"><br>在上述的Find函数中，我们可以看出对于根节点的寻找是需要一个一个往回追溯的，树越高，节点越多，所耗费的时间越大。</p>
+<p>这里探讨其中一种优化思路：<strong>按秩优化</strong>。</p>
+<p>其思想也很简单，由于对于根节点的寻找是需要一个一个往回追溯的，那么自然树的高度越小，所耗费的时间就越小。那么我们在合并两个集合的时候，尽量把矮树往高树上合并。</p>
+<p><img src="https://i.loli.net/2020/02/29/m5IDvPqKTohWz2Z.png" alt="disjoint3.png"><br>还是这两个集合，很明显，左树的高度大于右树，若我们将节点1接在节点6下，新树的高度相比左树还增加了1；若我们将节点6接在节点1下，新树的高度仍是左树的高度。</p>
+<p>可见，此优化的核心是记录各个集合树的高度并作比较。在此，我们增加一个大小等同于并查集数组S的数组Rank来记录每个元素作为根节点时的高度。合并操作代码：(其中的Rank表示树的高度)</p>
+<pre><code>void SetUnion(SetType Root1, SetType Root2)
+{
+    if (Rank[Root2] > Rank[Root1])
+        S[Root1] = Root2;
+    else
+    {
+        if (Rank[Root1] == Rank[Root2]) //两个集合高度一致，随便挑一个将其接在另一个上
+            Rank[Root1]++;
+        S[Root2] = Root1;
+    }
+}</code></pre>
+
+<p>在此提供一个简易的写法。对于根节点，其对应的数组元素中我们不再存储它本身，而是存其树的高度：</p>
+<pre><code>void SetUnion(SetType Root1, SetType Root2)
+{
+    if (S[Root2] < S[Root1])
+        S[Root1] = Root2;
+    else
+    {
+        if (S[Root1] == S[Root2])
+            S[Root1]--;
+        S[Root2] = Root1;
+    }
+}</code></pre>
+<p>上述代码中的树高是以一个负值来表示的。<del>在我的Kruskal算法中就采用的此种方式，但其实我当时根本不知道什么是按秩优化。</del><br><strong>但此种写法慎用，因为这样写的话就无法与下文的路径压缩一起使用。</strong></p>
+<p>除按高度外，也可以将树的规模作为rank来进行合并，与上述相似，只是将rank中的值改为子节点个数，这里就不多加赘述。</p>
+<p>两种按秩优化方式的复杂度均为最坏情况下树的高度，即$O(log_2N)$。</p>
+<h2 id="路径压缩"><a href="#路径压缩" class="headerlink" title="路径压缩"></a>路径压缩</h2><p>对于上述一个串类型的树，我们还可以采用路径压缩的优化方式。其核心思想相比按秩优化稍有些复杂：在我们第一次追溯根节点的过程中，其实我们已经隐式地知晓了某个节点是否是根节点。那么我们是否可以在追溯的过程中，将树做一些改变，这样在下一次查找的过程中就可剩下一些时间？</p>
+<p>其核心步骤为：将操作节点接在其父节点的父节点上。</p>
+<p>这样有些难以理解，咱们来举个例子。对于下面这样的并查集：<br><img src="https://i.loli.net/2020/02/29/XZPFTeMfdbyGNck.png" alt="disjoint4.png"><br>假设我们此次操作是查找元素4的根节点，那么我们第一次查找S[4]发现S[4]的值为3，说明4不是根节点，那么我们在递归节点3的同时，将4接在其父节点的父节点上，也就是节点2：<br><img src="https://i.loli.net/2020/02/29/LUxI6tbs3PJvQ2O.png" alt="disjoint5.png"><br>下一次递归时，我们操作的是节点3。同样，我们将其接在父节点的父节点上，也就是节点1：<br><img src="https://i.loli.net/2020/02/29/5XOEViSMz72G1AP.png" alt="disjoint6.png"><br>下面是节点2，将2接在其父节点的父节点上。注意，2的父节点是1，1此处没有父节点了，但我们在一开始说过，并查集的数组结构中，根节点的父节点是其本身，所以结果仍是将2接在1上，树的结构并没有改变。这也是为什么我在按秩优化中不推荐第二种写法的原因，因为在第二种写法中，S[Root]中存储的不是Root本身，而是树的高度。</p>
+<p><img src="https://i.loli.net/2020/02/29/4jyWfwMeQS8Iaoz.png" alt="disjoint7.png"><br>可见，经过一次路径压缩后，我们的集合树变矮了，这样若下次仍查找元素4，就可以少遍历一次。</p>
+<p>代码实现：</p>
+<pre><code>SetType Find(SetType X)
+{
+    if (S[X] == X)
+        return X;   //若是根节点，返回
+    else
+        return S[X] = Find(S[X]); //若不是根节点，递归寻找。同时更改树的结构
+}</code></pre>
+
+<p>此外，我曾在大佬的文章中见识过一种更加简洁🐂👃的写法：</p>
+<pre><code>SetType Find(SetType X)
+{
+    return X==S[X]?X;S[X]=Find(S[X]);
+}</code></pre>
+<p>一行解决并查集，无话可说。</p>
+<p>维基百科上有给出，单使用路径压缩时，时间复杂度是一个很复杂的式子，为$$Θ(n+f·(1+log_{2+f/n}n))$$</p>
+<h2 id="按秩优化-路径压缩"><a href="#按秩优化-路径压缩" class="headerlink" title="按秩优化+路径压缩"></a>按秩优化+路径压缩</h2><p>很明显，按秩优化优化的是SetUnion函数，路径压缩优化的是Find函数，我们显然可以将两种优化合并使用：</p>
+<pre><code>SetType Find(SetType X)
+{
+    if (S[X] == X)
+        return X;   //若是根节点，返回
+    else
+        return S[X] = Find(S[X]); //若不是根节点，递归寻找。同时更改树的结构
+}
+
+void SetUnion(SetType Root1, SetType Root2)
+{
+    if (Rank[Root2] > Rank[Root1])
+        S[Root1] = Root2;
+    else
+    {
+        if (Rank[Root1] == Rank[Root2]) //两个集合高度一致，随便挑一个将其接在另一个上
+            Rank[Root1]++;
+        S[Root2] = Root1;
+    }
+}</code></pre>
+
+<p>两者同时使用时，时间复杂度为$O(α(n))$。在维基百科的解释中，$α(n)$为$A(x, x)$的阿克曼函式，就结果来讲，$α(n)$在n很大时整体仍小于5。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>你就是我的玛斯塔吗?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/01/18/Docker%E9%83%A8%E7%BD%B2Flask/">Docker部署Flask</a>
+            
+        </section>
+
+        <section>
+            
+            <section id="comments" class="comments">
+              <style>
+                .comments{margin:30px;padding:10px;background:#fff}
+                @media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#fff}}
+              </style>
+              <div class="valine_comment"></div>
+<!--载入js，在<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>之前插入即可-->
+<!--Leancloud 操作库:-->
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<!--Valine 的核心代码库-->
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+      el: '.valine_comment',
+      app_id: 'ei0E99RKPlTDPgFvP8bigWOs-gzGzoHsz',
+      app_key: 'dSQ1swGyv6zP4nySG1330mRF',
+      placeholder: '欢迎留言',
+      notify: 'true',
+      verify: 'true',
+    });
+</script>
+            </section>
+        
+    </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© S.X. | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
