@@ -143,14 +143,11 @@
 <p>无奈之下，只能改用最笨的方法：既然浏览器不对后台进行请求，那就让他强行请求就好了。</p>
 <p><strong>核心想法是动态更改html中的url，每次请求的url不一样，浏览器便不会加载缓存</strong></p>
 <p>于是，在html文件中引入css时，可以采用这种方式：</p>
-<pre><code>&lt;link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css', v=0.0129)}}" /&gt;</code></pre>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&lt;link rel="stylesheet" href="&#123;&#123; url_for('static', filename='assets/css/main.css', v=0.0129)&#125;&#125;" &gt;;</span></pre></td></tr></table></figure>
 <p>每次更改样式文件后，手动更改一下或动态生成版本号，这样浏览器发现版本号对不上后就会重新请求一份。</p>
 <p>也可采用时间戳的方式。时间戳的好处在于能够避免重复。</p>
 <p>例如我加载本地的图片时，可采用以下方式引入时间戳：</p>
-<pre><code>
-    path = "static/wordcloud.png?timestamp="+new Date().getTime(); //在图片路径后加入时间戳
-    html = '&lt;img src="'+path+'" alt="wordcloud"/&gt;';
-</code></pre>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">path = <span class="string">"static/wordcloud.png?timestamp="</span>+<span class="keyword">new</span> <span class="built_in">Date</span>().getTime(); <span class="comment">//在图片路径后加入时间戳</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">html = <span class="string">'&lt;img src="'</span>+path+<span class="string">'" alt="wordcloud"&gt;'</span>;</span></pre></td></tr></table></figure>
 
 <p><del>我承认这个方法很笨，但真的立竿见影</del></p>
 <p><strong>果然，笨方法永远是最好用的。</strong></p>
