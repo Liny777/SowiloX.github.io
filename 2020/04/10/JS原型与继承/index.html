@@ -198,12 +198,14 @@
 
         <div class="post-content">
             <blockquote>
-<p>ECMAScript 2015 中引入的 JavaScript 类实质上是 JavaScript 现有的基于原型的继承的语法糖。类语法不会为JavaScript引入新的面向对象的继承模型。<br>上面这段话来自<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Classes" target="_blank" rel="noopener">MDN Web doc</a>对于JS中的类进行的描述。</p>
+<p>ECMAScript 2015 中引入的 JavaScript 类实质上是 JavaScript 现有的基于原型的继承的语法糖。类语法不会为JavaScript引入新的面向对象的继承模型。</p>
+<p style="text-align:right;"><a href='https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Classes' target="_blank" rel="noopener" >MDN Web doc</a></p>
 </blockquote>
 <p>在设计之初，JS本身只是单纯的作为一个用于网页设计的脚本语言，所以其并没有设计得很复杂。而对于继承，JS采用了原型的形式。</p>
 <h1 id="prototype与-proto"><a href="#prototype与-proto" class="headerlink" title="prototype与__proto__"></a>prototype与__proto__</h1><p>JS中万物皆对象，函数也是一种对象。</p>
 <p>每个函数对象都有一个prototype属性，而普通的对象没有。若我们要通过new Function()此种形式实例化一个函数对象之前，我们都会写一个构造函数来作为生成实例的模板，例如下面这个Foo构造函数：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span>(<span class="params">attr</span>) </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">this</span>.attr = attr;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
 <p>对于每一个构造函数，都拥有一个prototype原型对象。在默认情况下，所有的原型对象都会自动获得一个constructor属性，这个属性指向 prototype 属性所在的构造函数。在上面这个例子中，Foo的prototype中的constructor属性指向的就是Foo这个构造函数。</p>
 <p>下面我们来实例化两个Foo对象：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f1 = <span class="keyword">new</span> Foo(<span class="string">'A'</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f2 = <span class="keyword">new</span> Foo(<span class="string">'B'</span>);</span></pre></td></tr></table></figure>
@@ -265,7 +267,9 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">String</span>.__proto__ === <span class="built_in">Function</span>.prototype</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.__proto__ === <span class="built_in">Function</span>.prototype</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.__proto__ === <span class="built_in">Function</span>.prototype</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.__proto__ === <span class="built_in">Function</span>.prototype</span></pre></td></tr></table></figure>
 <p>那么，也就是说Object的__proto__指向Function的prototype，Funtion的prototype的__proto__又指向Object的prototype：<br><img src="https://i.loli.net/2020/04/11/e578nXQqy9cmRNa.png" alt="7.png"><br>非常的amazing啊。总结来说，一切普通对象都继承自Object.prototype，而对于函数对象，在中间还继承了Function.prototype，Function.prototype同样也是个普通对象，也继承自Object.prototype。</p>
 <p>其实‘继承’这个讲法不准确，因为JS并没有直接的继承，所有的继承都基于原型链，更准确的说法应该是一切对象的原型链在最后都会回归到–&gt;Object.prototype–&gt;null，而函数对象在此之前会先回到Function的prototype：–&gt;Function.protype–&gt;Object.prototype–&gt;null。</p>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="https://developer.mozilla.org/zh-CN/docs/Learn/JavaScript/Objects/Inheritance" target="_blank" rel="noopener">JavaScript 中的继承</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/proto" target="_blank" rel="noopener">Object.prototype.__proto__</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener">继承与原型链</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><blockquote>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Learn/JavaScript/Objects/Inheritance" target="_blank" rel="noopener">JavaScript 中的继承</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/proto" target="_blank" rel="noopener">Object.prototype.__proto__</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener">继承与原型链</a></p>
+</blockquote>
 
         </div>
 
