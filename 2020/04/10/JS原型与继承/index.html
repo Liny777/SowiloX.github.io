@@ -214,7 +214,7 @@
 <p>每个函数对象都有一个prototype属性，而普通的对象没有。下面是一个Foo函数对象：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span>(<span class="params">attr</span>) </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">this</span>.attr = attr;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
 
-<p>对于每一个函数对象，都拥有一个prototype原型。在默认情况下，所有的原型都会自动获得一个constructor属性，这个属性指向 prototype 属性所在的构造函数。在上面这个例子中，Foo的prototype中的constructor属性指向的就是Foo这个构造函数。</p>
+<p>对于每一个函数对象，都拥有一个prototype原型。在默认情况下，所有的原型都会自动获得一个constructor属性，这个属性指向 prototype 属性所在的函数对象。在上面这个例子中，Foo的prototype中的constructor属性指向的就是Foo这个函数对象。</p>
 <p>下面我们将Foo函数当作构造函数来实例化两个对象：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f1 = <span class="keyword">new</span> Foo(<span class="string">'A'</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f2 = <span class="keyword">new</span> Foo(<span class="string">'B'</span>);</span></pre></td></tr></table></figure>
 <p>在每一个实例中也会有一个constructor属性，其指向实例的构造函数。除此之外，每个对象(是任何对象，不止函数对象）还都会有一个__proto__属性，这个属性用来指向它们的原型对象prototype。</p>
