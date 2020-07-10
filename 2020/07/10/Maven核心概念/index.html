@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="S.X.">
+
+
+    <meta name="subtitle" content="Core Dumped">
+
+
+
+
+<title>Maven核心概念 | Core Dumped</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.1.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">吐核</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/links">Links</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">吐核</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/links">Links</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Maven核心概念</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">S.X.</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 10, 2020&nbsp;&nbsp;0:12:22</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%89%8D%E5%90%8E%E7%AB%AF/">前后端</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="Maven目录"><a href="#Maven目录" class="headerlink" title="Maven目录"></a>Maven目录</h1><p>一个Maven工程的目录结构大致如下：</p>
+<blockquote>
+<p>Project Name</p>
+<p>|— src            源码目录</p>
+<p>|—|— main        主程序目录</p>
+<p>|—|—|— java        主程序java源文件目录</p>
+<p>|—|—|— resources    主程序资源文件目录</p>
+<p>|—|— test        测试程序目录</p>
+<p>|—|—|— java        测试程序java源文件目录</p>
+<p>|—|—|— resources    测试程序资源文件目录</p>
+<p>|— target        编译结果文件目录</p>
+<p>|— pom.xml        工程配置文件</p>
+</blockquote>
+<h1 id="POM"><a href="#POM" class="headerlink" title="POM"></a>POM</h1><p>POM全称Project Object Model，项目对象模型，用来描述整个项目的结构，是Maven工程的核心配置文件，用来配置与构建过程相关的一切设置，重要性等同于动态web项目中的web.xml。</p>
+<p>下面是一个idea自动生成的Maven项目的pom.xml文件内容：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.example<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span></pre></td></tr></table></figure>
+
+<p>其中<code>&lt;modelVersion&gt;</code>标签是POM版本信息，此处与项目配置无关，最好不要修改。后面三个标签<code>&lt;groupId&gt;</code> <code>&lt;artifactId&gt;</code> <code>&lt;version&gt;</code>共同构成Maven项目中的坐标信息。</p>
+<h1 id="坐标"><a href="#坐标" class="headerlink" title="坐标"></a>坐标</h1><p>前面说到，pom.xml中的</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.example<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></pre></td></tr></table></figure>
+
+<p>这三行共同构成坐标信息。</p>
+<p>坐标，顾名思义，用以定位。这三个标签中的值共同对一个Maven工程进行唯一定位。其中，</p>
+<p><code>&lt;groupId&gt;</code>中通常为公司、组织域名倒序。</p>
+<p><code>&lt;artifactId&gt;</code>中为模块名称。</p>
+<p><code>&lt;version&gt;</code>中为版本信息。</p>
+<p>这个三维坐标信息可以唯一定位一个Maven工程的目录。例如上面例子对应的目录为<code>org/example/maven-test/1.0-SNAPSHOT/</code>。</p>
+<h1 id="仓库"><a href="#仓库" class="headerlink" title="仓库"></a>仓库</h1><p>用以存储Maven项目所依赖的插件和第三方工具。本地仓库的位置通常为Home目录下的.m2文件夹内。也可通过<code>Maven安装目录\conf\settings.xml</code>中的<code>&lt;localRepository&gt;</code>标签来自行定义本地仓库的目录。</p>
+<h1 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h1><p> Maven有三个标准的生命周期：</p>
+<ul>
+<li>clean cycle：项目清理</li>
+<li>site cycle 创建项目站点文档</li>
+<li>default cycle：项目构建</li>
+</ul>
+<h2 id="Clean"><a href="#Clean" class="headerlink" title="Clean"></a>Clean</h2><p>clean生命周期中有三个阶段：</p>
+<ul>
+<li>pre-clean：执行clean之前的工作</li>
+<li>clean：清楚上次一构建生成的文件</li>
+<li>post-clean：执行clean之后需要的工作</li>
+</ul>
+<h2 id="Site"><a href="#Site" class="headerlink" title="Site"></a>Site</h2><p>site生命周期分为四个阶段：</p>
+<ul>
+<li>pre-site：执行生成文档前的工作</li>
+<li>site：生成站点文档</li>
+<li>post-site：执行生成文档后需要的工作</li>
+<li>site-deploy：将生成的站点文档部署至服务器</li>
+</ul>
+<h2 id="Default"><a href="#Default" class="headerlink" title="Default"></a>Default</h2><p>最复杂的一个生命周期。对于一个完整的构建过程，生命周期主要分为以下阶段：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">+----------+	  +---------+     +------+     +---------+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">| validate | ---&gt; | compile | --&gt; | test | --&gt; | package |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">+----------+      +---------+	  +------+     +---------+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">													|</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">													v</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">				 +--------+     +---------+		+--------+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">				 | deploy | &lt;-- | install | &lt;-- | verify |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">				 +--------+	    +---------+		+--------+</span></pre></td></tr></table></figure>
+
+<p>其中：</p>
+<ul>
+<li>validate：验证项目是否正确，信息是否可用</li>
+<li>compile：编译</li>
+<li>test：执行单元测试代码</li>
+<li>package：创建jar包/war包</li>
+<li>verify：继承测试检查</li>
+<li>install：安装至本地仓库</li>
+<li>deploy：部署至远程仓库</li>
+</ul>
+<p>此周期不一定是完整执行，例如<code>mvn compile</code>命令就只执行至compile阶段，<code>mvn install</code>命令只执行到install阶段，但所有命令都会从第一阶段开始。</p>
+<h1 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h1><h2 id="依赖安装"><a href="#依赖安装" class="headerlink" title="依赖安装"></a>依赖安装</h2><p>假如我们现在有第二个工程名为<code>maven-another-test</code>，我们想在这个项目中应用上一个<code>maven-test</code>生成的jar包，需先将<code>maven-test</code>安装至本地仓库中。安装方法为：在该项目的POM所在目录运行命令<code>mvn install</code>即可。之后，需在<code>maven-hello</code>的POM中<code>&lt;dependencies&gt;</code>内添加所需依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.example<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>compile<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：一切构建命令均需要在POM所在目录下执行</p>
+</blockquote>
+<h2 id="依赖范围"><a href="#依赖范围" class="headerlink" title="依赖范围"></a>依赖范围</h2><p>上面的POM中<code>&lt;scope&gt;</code>便签描述的就是当前依赖所有效的范围。其内容有三种：compile、test和provided。</p>
+<ul>
+<li>compile：依赖对当先项目的主程序和测试程序均有效，且参与打包、部署和运行。</li>
+<li>test：依赖只对测试程序有效，对主程序无效，不参与打包、部署及运行。例：junit</li>
+<li>provided：通常为服务器容器提供的api，对主程序和测试程序均有效，不参与打包和部署，因为服务器会提供，所以参与运行。例：servlet-api</li>
+</ul>
+<h2 id="依赖传递"><a href="#依赖传递" class="headerlink" title="依赖传递"></a>依赖传递</h2><p>上述两个项目中，<code>maven-another-test</code>需要依赖<code>maven-test</code>，那么<code>maven-test</code>中设置的依赖，将会传递至<code>maven-another-test</code>中。例如假若<code>maven-test</code>中依赖了<code>spring-core</code>，那么<code>maven-another-test</code>也会同样依赖<code>spring-core</code>，即使它的POM中并没有进行<code>spring-core</code>的依赖设置。并且只有compile类型的依赖可以传递，test和provided均不可以传递。</p>
+<h2 id="依赖排除"><a href="#依赖排除" class="headerlink" title="依赖排除"></a>依赖排除</h2><p>与依赖传递相反，<code>maven-another-test</code>的依赖中包含了<code>maven-test</code>中传递过来的<code>spring-core</code>，现在我们想排除一些传递过来的依赖。例如，传递过来的<code>spring-core</code>中包含<code>commons-logging</code>，但是在<code>maven-another-test</code>中，我不想依赖这个<code>commons-logging</code>，那么我就需要排除掉这个依赖。具体方法为，在工程的pom.xml对应的<code>&lt;dependency&gt;</code>标签内，我们添加如下部分：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.example<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>compile<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">        <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-logging<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-logging<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">        <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">	<span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span></pre></td></tr></table></figure>
+
+<p>依赖排除也可传递。假若我们在<code>maven-test</code>中添加了排除标签来排除<code>commons-logging</code>，那么<code>maven-another-test</code>中同样也会排除<code>commons-logging</code>。</p>
+<h2 id="依赖原则"><a href="#依赖原则" class="headerlink" title="依赖原则"></a>依赖原则</h2><h3 id="路径最短者优先"><a href="#路径最短者优先" class="headerlink" title="路径最短者优先"></a>路径最短者优先</h3><p>现在假若我们又有一个新的工程叫做<code>maven-third-test</code>，它依赖于<code>maven-another-test</code>。现在<code>maven-test</code>依赖了一个4.0.0.RELEASE版本的<code>spring-core</code>，而<code>maven-another-test</code>中我们并没有依赖传递过来的<code>spring-core</code>，而是手动设置依赖了一个3.2.0.RELEASE版本的<code>spring-core</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">+------------------+    +--------------------+            +------------+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">| maven-third-test | -&gt; | maven-another-test | --------&gt;  | maven-test |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">+------------------+    +--------------------+            +------------+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">                                  |                              |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">                                  v                              v</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">                     +---------------------------+ +---------------------------+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">                     | spring-core.3.2.0.RELEASE | | spring-core.4.0.0.RELEASE |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">                     +---------------------------+ +---------------------------+</span></pre></td></tr></table></figure>
+
+<p>这种情况下，根据路径最短者优先的原则，<code>maven-third-test</code>中的依赖会是3.2.0.RELEASE版本。</p>
+<h3 id="先声明者优先"><a href="#先声明者优先" class="headerlink" title="先声明者优先"></a>先声明者优先</h3><p>假若依赖路径长度一样</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">                                    +------------+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">						+---------&gt; | maven-test |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">+------------------+    |           +------------+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">| maven-third-test | ---+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">+------------------+    |           +--------------------+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">                        +---------&gt; | maven-another-test |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">                                    +--------------------+</span></pre></td></tr></table></figure>
+
+<p>此种情况下，Maven会根据<code>maven-third-test</code>的pom.xml中判断哪个依赖是先声明的。假若依赖<code>maven-test</code>的标签先于<code>maven-another-test</code>，那么<code>maven-third-test</code>中的依赖将会是4.0.0.RELEASE版本。</p>
+<h2 id="依赖统一声明管理"><a href="#依赖统一声明管理" class="headerlink" title="依赖统一声明管理"></a>依赖统一声明管理</h2><p>假如现在我们的<code>maven-test</code>工程中依赖了很多3.2.0.RELEASE版本的spring框架下的jar包，现在我们想把他们统一升级为4.0.0.RELEASE版本，但是在<code>&lt;dependencies&gt;</code>里一个一个改过于麻烦，我们可以在POM里添加一个<code>&lt;properties&gt;</code>标签来进行版本的同一管理，具体用法如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.example<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">        <span class="tag">&lt;<span class="name">example.spring.version</span>&gt;</span>4.0.0.RELEASE<span class="tag">&lt;/<span class="name">example.spring.version</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">    </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;example.spring.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;example.spring.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">28</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-jdbc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">29</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;example.spring.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">30</span></pre></td><td class="code"><pre><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">31</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">32</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">33</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span></pre></td></tr></table></figure>
+
+<p>上述xml<code>&lt;properties&gt;</code>中的<code>&lt;example.spring.version&gt;</code>为自定义的标签，其内部值为需统一的版本号。之后在对应的依赖标签下，将<code>&lt;version&gt;</code>标签内的值改为<code>${自定义版本标签}</code>即可。</p>
+<p>此种<code>&lt;properties&gt;</code>自定义标签+<code>${}</code>组合能用于统一配置任何属性，例如编码格式等。</p>
+<h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><p>前面说到，依赖传递只能传递compile类型，test和provided类型均不能传递。那么现在就有一个问题，假如现在<code>maven-test</code>中的junit版本是5.0，但<code>maven-another-test</code>是4.0版本，由于junit是用于测试的依赖包，无法传递，我们现在又想统一junit的版本，这时我们就可以用继承来解决。</p>
+<p>在继承前，我们需要创建一个工程来作为父工程，且打包方式设为pom。同时，在父工程的pom.xml里添加<code>&lt;dependencyManagement&gt;</code>标签来进行依赖管理。下面是这个父工程的pom.xml:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.example<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">packaging</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    <span class="comment">&lt;!-- 依赖管理 --&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">        <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>juint<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">                <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">            <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">        <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span></pre></td></tr></table></figure>
+
+<p>之后，在各子工程中添加对父工程的引用。方式为直接在子工程的pom.xml添加如下标签：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.example<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    <span class="comment">&lt;!--以子工程pom.xml为起始目录，到父工程pom.xml的相对路径--&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">relativePath</span>&gt;</span>../junit-parent/pom.xml<span class="tag">&lt;/<span class="name">relativePath</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span></pre></td></tr></table></figure>
+
+<p>之后IDE会提示下面的坐标标签中出现与负工程标签重复的内容，比如<code>&lt;groupId&gt;</code>一样，删掉即可。最后再删除掉子工程中junit依赖中的版本信息。若需覆写，可以保留。</p>
+<p>配置继承完成后，执行安装时，<strong>需先安装父工程</strong>。</p>
+<h1 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h1><p>前面说到，继承后，安装时需先安装父工程，再一个个安装子工程，这样很麻烦。于是我们可以利用聚合，在安装父工程的同时，将子工程也全部安装。具体配置方式为，在父工程的pom.xml中，添加<code>&lt;modules&gt;</code>标签：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">modules</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">module</span>&gt;</span>../maven-test<span class="tag">&lt;/<span class="name">module</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">module</span>&gt;</span>../maven-another-test<span class="tag">&lt;/<span class="name">module</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">modules</span>&gt;</span></span></pre></td></tr></table></figure>
+
+<p>即可实现一键安装。</p>
+<h1 id="杂七杂八"><a href="#杂七杂八" class="headerlink" title="杂七杂八"></a>杂七杂八</h1><p>在idea中install maven项目时，有的时候会碰见下面的报错</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">[ERROR] 不再支持源选项 5。请使用 6 或更高版本。</span></pre></td></tr></table></figure>
+
+<p>可问题是，我jdk版本是13啊？在idea设置中改了compiler，依然没用。不但没用，而且重启idea后，默认环境又给我跳回1.5了。真就玄学呗。</p>
+<p>目前的解决办法是在项目的pom.xml中的<code>&lt;properties&gt;</code>标签下添加如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">maven.compiler.source</span>&gt;</span>13<span class="tag">&lt;/<span class="name">maven.compiler.source</span>&gt;</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">maven.compiler.target</span>&gt;</span>13<span class="tag">&lt;/<span class="name">maven.compiler.target</span>&gt;</span></span></pre></td></tr></table></figure>
+
+<p>问题倒是能解决，但就是每个工程都得加这么一个东西，很别扭。目前没找到其他一劳永逸的方法。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>你就是我的玛斯塔吗?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Maven/"># Maven</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/04/10/JS%E5%8E%9F%E5%9E%8B%E4%B8%8E%E7%BB%A7%E6%89%BF/">JS原型与继承</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+
+
+    <div id="gitalk-container" style="max-width: 780px; margin: auto;"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
+<script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<div id="gitalk-container" style="max-width: 780px; margin: auto;"></div>
+<script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'd90c20361b6ee51f6978',
+        clientSecret: '63f705eb3e8350671a510b56acd7bc5667c5d889',
+        repo: 'SowiloX.github.io',
+        owner: 'SowiloX',
+        admin: 'SowiloX',
+        id: md5(location.pathname),      
+        labels: 'Gitalk'.split(',').filter(l => l),
+        perPage: 10,
+        pagerDirection: 'last',
+        createIssueManually: true,
+        distractionFreeMode: false
+      })
+      gitalk.render('gitalk-container')
+</script>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright" style="helvetica neue,arial,hiragino sans gb,stheiti,wenquanyi micro hei,\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif;">
+        <span>© 2019 - 2020 S.X. 
+            | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a>
+        </span>
+    </div>
+    <div>
+        
+            <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<span class="site-uv">
+    <i class="icon-font icon-yonghufangkeshu"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>&nbsp;
+
+
+<span class="site-pv">
+    <i class="icon-font icon-yanjing"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
+
+          
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
