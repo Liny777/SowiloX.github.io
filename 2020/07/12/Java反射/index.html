@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="S.X.">
+
+
+    <meta name="subtitle" content="Core Dumped">
+
+
+
+
+<title>Java反射 | Core Dumped</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.1.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">吐核</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/links">Links</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">吐核</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/links">Links</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java反射</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">S.X.</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 12, 2020&nbsp;&nbsp;23:03:14</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%89%8D%E5%90%8E%E7%AB%AF/">前后端</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>最近在学springboot，想看看这个框架的一些具体细节，发现网上的文章里经常提到反射反射反射，这又得过来学学反射机制……</p>
+<p>总得来讲，Java的反射机制可以让我们在程序运行时动态构建一个对象，获取对象的属性、构造器以及方法。反射会破坏Java代码的封装性，所以一般只用于框架中。反射用得好，能把JVM掀个底朝天(bushi</p>
+<h1 id="Java代码如何被运行"><a href="#Java代码如何被运行" class="headerlink" title="Java代码如何被运行"></a>Java代码如何被运行</h1><h2 id="源代码阶段"><a href="#源代码阶段" class="headerlink" title="源代码阶段"></a>源代码阶段</h2><p>假若我们当前有一个普通的Java代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Wizard</span> </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">public</span> String name;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> healthPoint;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">protected</span> <span class="keyword">double</span> magicPoint;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">	</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Wizard</span><span class="params">()</span> </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">this</span>.name = <span class="string">"Gandalf"</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">this</span>.healthPoint = <span class="number">10</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">this</span>.magicPoint = <span class="number">100</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enchant</span><span class="params">(String eleName)</span> </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">        System.out.println(<span class="string">"Generate "</span> + eleName + <span class="string">" element."</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
+<p>在javac之后，会生成一个Wizard.class文件，这个class文件中主要包含三个部分：成员变量，构造器和成员方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Wizard.class</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">+---------------------------------------+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">| public String name;                   |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">| private double healthPoint;           |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">| protected double magicPoint;          |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">+&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">| public Wizard()&#123;&#125;           			|</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">+&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">| public void enchant(String eleName)&#123;&#125; |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">+---------------------------------------+</span></pre></td></tr></table></figure>
+
+<p>此时我们这个Wizard仍处于源代码阶段，说白了，就还是在硬盘中存着。</p>
+<h2 id="类对象阶段"><a href="#类对象阶段" class="headerlink" title="类对象阶段"></a>类对象阶段</h2><p>众所周知，我们这个Wizard是需要被JVM运行的，那么JVM就需要想办法把我们编译过的Wizard.class加载进去，这个过程是通过ClassLoader，类加载器，来实现的。那么加载进JVM了，现在这个Wizard.class是一个字节码文件，我们得需要一个东西来表示我们当前的Wizard.class吧。这时，JVM会创建一个Class类来对我们的字节码文件进行表示。这块所说的Class类是Java中有个类叫Class，这个Class类用来表示我们的*.class文件，就跟套娃一样。</p>
+<p>上面说到，一个*.class字节码文件中主要是三部分：成员变量，构造器和成员方法。那么我们这个Class类，除了需要一些例如类名、编号等属性之外，最主要的肯定是要想办法存储这三个部分。Java同样提供了三个类来表示这三个部分：Field，用来储存成员变量的类；Constructor，用来储存构造器的类；Method，用来储存成员方法的类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Wizard的Class类对象主要部分</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">+-----------------------------+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">| Field[] fields;             |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">| Constructor[] constructors; |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">| Method[] methods;           |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">| (...other minor attrs...)   |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">+-----------------------------+</span></pre></td></tr></table></figure>
+
+<p>因为一个类里会有多个成员变量、构造器以及方法，所以自然需要分别创建一个数组去储存他们。</p>
+<h2 id="运行时阶段"><a href="#运行时阶段" class="headerlink" title="运行时阶段"></a>运行时阶段</h2><p>成功讲Wizard.class加载进JVM后，JVM会创建这个对象的实例并给他分配内存空间。这时堆空间内就出现我们的Wizard对象了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">+--------------+ javac +--------------+ ClassLoader +------------------------+ create object +--------------+</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">| Wizard.java  | ----&gt; | Wizard.class | ----------&gt; | Class object of Wizard | ------------&gt; | new Wizard() |</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">+--------------+       +--------------+             +------------------------+               +--------------+</span></pre></td></tr></table></figure>
+
+<p>既然我们的Java代码在JVM中编程了一个Class类对象，那么我们就可以通过这个Class类对象来创建这个Wizard对象，并且可以通过其内部的Field、Constructor和Method对象数组来获取Wizard的属性、构造器以及方法。</p>
+<h1 id="Class类对象"><a href="#Class类对象" class="headerlink" title="Class类对象"></a>Class类对象</h1><p>获取Class类对象主要有三种方式，分别在上述三个不同的阶段来使用。</p>
+<h2 id="Class-forName"><a href="#Class-forName" class="headerlink" title="Class.forName()"></a>Class.forName()</h2><p>这个方法用在源代码阶段，也就是说class字节码文件还没有被JVM加载进内存。</p>
+<p>通过<code>Class.forName(&quot;类名&quot;)</code>来将字节码文件加载进内存，并返回Class类对象。此处的类名，包括所属的包名，例如<code>org.example.Wizard</code>。</p>
+<p>由于此方法需要传入一个字符串作为参数，所以通常用于配置文件。直接从文件中读取类名，然后通过字符串传递来获得到Class对象。</p>
+<h2 id="类名-class"><a href="#类名-class" class="headerlink" title="类名.class"></a>类名.class</h2><p>此方法用在类对象阶段，也就是字节码已经加载进了内存，但还没有创建对象的时候。</p>
+<p>此处的class是这个类的一个属性，我们通过<code>类名.class</code>来获取到当前类的class属性，从而获取到Class类对象。</p>
+<p>此方法多用于调用方法时进行参数传递。例如SpringBoot在主函数中运行SpringBootApplication时，就需要传递这个类.class给run函数。</p>
+<h2 id="对象-getClass"><a href="#对象-getClass" class="headerlink" title="对象.getClass()"></a>对象.getClass()</h2><p>此方法用在运行时阶段，也就是内存中已经有创建完的对象了。</p>
+<p>通过<code>对象.getClass()</code>方法来获取当前对象所对应的Class类对象。所有对象都会拥有<code>getClass()</code>方法，此方法被封装在<code>Object</code>对象中。</p>
+<h2 id="class加载次数"><a href="#class加载次数" class="headerlink" title="*.class加载次数"></a>*.class加载次数</h2><p>那么问题来了，上述三种方式在在同一段代码中应用的话，不同方法获取到的Class对象是否是同一个对象？我们可以用以下代码来做简单的验证：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Class cls1 = Class.forName(<span class="string">"org.example.Wizard"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">Class cls2 = Wizard<span class="class">.<span class="keyword">class</span></span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">Wizard w = <span class="keyword">new</span> Wizard();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">Class cls3 = w.getClass();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">System.out.println(cls1 == cls2);	<span class="comment">//true</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">System.out.println(cls2 == cls3);	<span class="comment">//true</span></span></pre></td></tr></table></figure>
+
+<p>最后我们得到的结果均为true，可见，三种方法在同一次运行过程中，得到的Class对象是同一个对象。也就是说，对于同一个*.class字节码文件，每次运行只被JVM加载一次。当然，前提是JVM用的是同一个类加载器。</p>
+<h1 id="Field"><a href="#Field" class="headerlink" title="Field"></a>Field</h1><p>Java中对于Field对象的获取，提供了如下几个api：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function">Field	<span class="title">getField</span><span class="params">(String name)</span>			<span class="comment">// 获取特定的public成员变量对象</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="function">Field[]	<span class="title">getFields</span><span class="params">()</span>    					<span class="comment">// 获取所有public成员变量对象</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="function">Field	<span class="title">getDeclaredField</span><span class="params">(String name)</span>	<span class="comment">// 获取特定的成员变量对象，不受权限修饰符限制</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="function">Field[]	<span class="title">getDeclaredFields</span><span class="params">()</span>				<span class="comment">// 获取所有成员变量对象，不受权限修饰符限制</span></span></span></pre></td></tr></table></figure>
+
+<p>同时，Field对象中提供了相应的get和set方法，可以获取和设置变量具体的值。以我们的Wizard对象为例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Wizard wizard = <span class="keyword">new</span> Wizard();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">Class cls = Wizard<span class="class">.<span class="keyword">class</span></span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">Field field = cls.getField(<span class="string">"name"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">Object value = field.get(wizard);	<span class="comment">// 获取name值</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">field.set(wizard, <span class="string">"Merlin"</span>);	<span class="comment">//更改name值</span></span></pre></td></tr></table></figure>
+
+<p>上述代码中，我们需要new一个相应的Wizard对象，并以参数形式传入get和set才能进行变量的获取和更改。这很好理解，有了对象我才能获取和更改，没有对象我get啥set啥？可是对于一个public修饰的属性，似乎根本就不需要反射我们就能进行获取和修改，但是反射机制，能让我们同样获取到非公有属性(private, protected和default）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Wizard wizard = <span class="keyword">new</span> Wizard();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">Class cls = Wizard<span class="class">.<span class="keyword">class</span></span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">Field field = cls.getDeclaredField(<span class="string">"healthPoint"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">Object value = field.get(wizard);</span></pre></td></tr></table></figure>
+
+<p>如果我们只是把<code>getField</code>换成<code>getDeclaredField</code>就像获取到非公有属性，在打印value的时候，会碰见如下报错：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Exception in thread "main" java.lang.IllegalAccessException: class Main cannot access a member of class Wizard with modifiers "private"</span></pre></td></tr></table></figure>
+
+<p>这时，我们需要在get之前添加一行：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">field.setAccessible(<span class="keyword">true</span>);</span></pre></td></tr></table></figure>
+
+<p>通过暴力反射，来忽略访问权限修饰符的检查，从而获取到非公有变量的值。对于get方法也同样。</p>
+<h1 id="Constructor"><a href="#Constructor" class="headerlink" title="Constructor"></a>Constructor</h1><p>与Field类似，对于获取Constructor对象，有如下api：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function">Constructor&lt;T&gt;		<span class="title">getConstructor</span><span class="params">(Class&lt;?&gt;... parameterTypes)</span>			<span class="comment">// 获取特定的public构造器对象</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="function">Constructor&lt;?&gt;[]	<span class="title">getConstructors</span><span class="params">()</span>									<span class="comment">// 获取所有public构造器对象</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="function">Constructor&lt;T&gt;		<span class="title">getDeclaredConstructor</span><span class="params">(Class&lt;?&gt;... parameterTypes)</span>	<span class="comment">// 获取特定的构造器对象，不受权限修饰符限制</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="function">Constructor&lt;?&gt;[]	<span class="title">getDeclaredConstructors</span><span class="params">()</span>							<span class="comment">// 获取所有构造器对象，不受权限修饰符限制</span></span></span></pre></td></tr></table></figure>
+
+<p>对于获取指定的构造器，我们需要传入改构造器的参数的Class类来指定构造器。假若现在我们的Wizard拥有两个构造器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Wizard</span><span class="params">()</span> </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">this</span>.name = <span class="string">"Gandalf"</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">this</span>.healthPoint = <span class="number">10</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">this</span>.magicPoint = <span class="number">100</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Wizard</span><span class="params">(String name, <span class="keyword">double</span> healthPoint, <span class="keyword">double</span> magicPoint)</span> </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">this</span>.name = name;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">this</span>.healthPoint = healthPoint;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">this</span>.magicPoint = magicPoint;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
+<p>我们可以通过<code>getConstructor</code>来分别获取两个构造器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Class cls = Wizard<span class="class">.<span class="keyword">class</span></span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">Constructor c1 = cls.getConstructor();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">Constructor c2 = cls.getConstructor(String<span class="class">.<span class="keyword">class</span>, <span class="title">double</span>.<span class="title">class</span>, <span class="title">double</span>.<span class="title">class</span>)</span>;</span></pre></td></tr></table></figure>
+
+<p>获取构造器的目的，显然就是为了构造一个新对象。在Constructor对象中，Java提供了一个new对象的方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function">T	<span class="title">newInstance</span><span class="params">(Object... initargs)</span></span></span></pre></td></tr></table></figure>
+
+<p>实际使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Object wizard = c1.newInstance();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">Object anotherWizard = c2.newInstance(<span class="string">"Merlin"</span>, <span class="number">999</span>, <span class="number">999</span>);</span></pre></td></tr></table></figure>
+
+<p>对于无参数的构造器，Java提供了更简便的new对象的方法，不用通过Constructor，Class就可以直接创建对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Object wizard = cls.newInstance();</span></pre></td></tr></table></figure>
+
+<p>同样，Constructor中也配备了<code>setAccessible</code>来进行暴力反射的方法。</p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p>同上，获取Method对象有以下四个api：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function">Method		<span class="title">getMethod</span><span class="params">(String name, Class&lt;?&gt;... parameterTypes)</span>			<span class="comment">// 获取特定的public方法对象</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="function">Method[]	<span class="title">getMethods</span><span class="params">()</span>												<span class="comment">// 获取所有public方法对象</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="function">Method		<span class="title">getDeclaredMethod</span><span class="params">(String name, Class&lt;?&gt;... parameterTypes)</span>	<span class="comment">// 获取特定的方法对象，不受权限修饰符限制</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="function">Method[]	<span class="title">getDeclaredMethods</span><span class="params">()</span>										<span class="comment">// 获取所有方法对象，不受权限修饰符限制</span></span></span></pre></td></tr></table></figure>
+
+<p>可见，如果要获取特定方法，除了需要传入方法名称之外，还需要传入该方法各参数的Class类，因为方法有可能被重载，名称可能一样，但参数不一样。</p>
+<p>获取Wizard类中的<code>enchant</code>方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Class cls = Wizard<span class="class">.<span class="keyword">class</span></span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">Method method = cls.getMethod(<span class="string">"enchant"</span>, String<span class="class">.<span class="keyword">class</span>)</span>;</span></pre></td></tr></table></figure>
+
+<p>显然，获取方法的目的就是执行它。Method类中提供了一个api来进行方法执行：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function">Object	<span class="title">invoke</span><span class="params">(Object obj, Object... args)</span></span></span></pre></td></tr></table></figure>
+
+<p>调用<code>invoke</code>需要传入指定方法的对象以及调用该方法所需的参数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Wizard wizard = <span class="keyword">new</span> Wizard();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">method.invoke(wizard, <span class="string">"light"</span>);</span></pre></td></tr></table></figure>
+
+<h1 id="继承问题"><a href="#继承问题" class="headerlink" title="继承问题"></a>继承问题</h1><p>假如现在我们的Wizard继承于Maiar类，Maiar类继承Ainur类，现在我们通过<code>getFields</code>来获取Wizard公有成员变量，我们会发现，Maiar和Ainur的公有变量也均被获取：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public java.lang.String Wizard.name</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">public int Maiar.maiarPublicVar</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">public int Ainur.ainurPublicVar</span></pre></td></tr></table></figure>
+
+<p>但若通过<code>getDeclaredFields</code>来获取所有成员变量，我们会发现只有Wizard的所有成员变量被获取到了，而Maiar和Ainur并没有：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public java.lang.String Wizard.name</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">private double Wizard.healthPoint</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">protected double Wizard.magicPoint</span></pre></td></tr></table></figure>
+
+<p>对于获取Method，结果也同上: <code>getMethods</code>会获取Wizard, Maiar, Ainur以及Object所有的public方法（因为所有类都继承于Object。同时，Object中无成员变量，所以<code>getFields</code>没有获取到任何关于Object的变量）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public void Wizard.enchant(java.lang.String)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">public void Maiar.maiarPublicMethod()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">public void Ainur.ainurPublicMethod()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">public final void java.lang.Object.wait() throws java.lang.InterruptedException</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">public boolean java.lang.Object.equals(java.lang.Object)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">public java.lang.String java.lang.Object.toString()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">public native int java.lang.Object.hashCode()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">public final native java.lang.Class java.lang.Object.getClass()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">public final native void java.lang.Object.notify()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">public final native void java.lang.Object.notifyAll()</span></pre></td></tr></table></figure>
+
+<p>而使用<code>getDeclaredMethods</code>，只能获取到Wizard的所有方法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public void Wizard.enchant(java.lang.String)</span></pre></td></tr></table></figure>
+
+<p>也就是说，带有Declared的get方法只能获取到<strong>当前类</strong>的变量和方法，不管是public修饰的还是非public修饰的。而不带有Declared的普通get方法能获取到自己、父类及父类以上的所有<strong>public</strong>修饰的变量和方法。对于Constructor，不管用什么，都只能获取到当前类的构造器。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>System.Call("Enhance Armament!");</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Java/"># Java</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/07/10/Maven%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/">Maven从入门到入土</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+
+
+    <div id="gitalk-container" style="max-width: 780px; margin: auto;"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
+<script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<div id="gitalk-container" style="max-width: 780px; margin: auto;"></div>
+<script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'd90c20361b6ee51f6978',
+        clientSecret: '63f705eb3e8350671a510b56acd7bc5667c5d889',
+        repo: 'SowiloX.github.io',
+        owner: 'SowiloX',
+        admin: 'SowiloX',
+        id: md5(location.pathname),      
+        labels: 'Gitalk'.split(',').filter(l => l),
+        perPage: 10,
+        pagerDirection: 'last',
+        createIssueManually: true,
+        distractionFreeMode: false
+      })
+      gitalk.render('gitalk-container')
+</script>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright" style="helvetica neue,arial,hiragino sans gb,stheiti,wenquanyi micro hei,\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif;">
+        <span>© 2019 - 2020 S.X. 
+            | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a>
+        </span>
+    </div>
+    <div>
+        
+            <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<span class="site-uv">
+    <i class="icon-font icon-yonghufangkeshu"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>&nbsp;
+
+
+<span class="site-pv">
+    <i class="icon-font icon-yanjing"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
+
+          
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
