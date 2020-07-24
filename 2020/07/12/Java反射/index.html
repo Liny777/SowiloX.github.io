@@ -270,6 +270,7 @@
 <p>对于无参数的构造器，Java提供了更简便的new对象的方法，不用通过Constructor，Class就可以直接创建对象：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Object wizard = cls.newInstance();</span></pre></td></tr></table></figure>
 
+<p>*但此种方法在Java9之后遭到废弃，建议用<code>Object wizard = cls.getDeclaredConstructor().newInstance()</code>代替。</p>
 <p>同样，Constructor中也配备了<code>setAccessible</code>来进行暴力反射的方法。</p>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p>同上，获取Method对象有以下四个api：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function">Method		<span class="title">getMethod</span><span class="params">(String name, Class&lt;?&gt;... parameterTypes)</span>          <span class="comment">// 获取特定的public方法对象</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="function">Method[]	<span class="title">getMethods</span><span class="params">()</span>                                                <span class="comment">// 获取所有public方法对象</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="function">Method		<span class="title">getDeclaredMethod</span><span class="params">(String name, Class&lt;?&gt;... parameterTypes)</span>  <span class="comment">// 获取特定的方法对象，不受权限修饰符限制</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="function">Method[]	<span class="title">getDeclaredMethods</span><span class="params">()</span>                                        <span class="comment">// 获取所有方法对象，不受权限修饰符限制</span></span></span></pre></td></tr></table></figure>
@@ -337,6 +338,8 @@
             </div>
         </section>
         <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/07/20/%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%AC%E5%92%8C%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/">控制反转和依赖注入</a>
             
             
             <a class="next" rel="next" href="/2020/07/10/Maven%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/">Maven从入门到入土</a>
