@@ -418,6 +418,7 @@ height:38.2vh;
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
             <main class="main post-page">
+    
     <article class="article-entry">
         <p>最近闲得想把flask项目部署到服务器上，参考了<a href="https://dormousehole.readthedocs.io/en/latest/deploying/index.html" target="_blank" rel="noopener">官方文档</a>后，最初选择的是Apache的httpd+mod_wsgi。但apache的配置实在是过于繁琐，各种错误频频发生。尽管通过参考一些网上的资料排除了许多故障，但最后的404问题实在不知道怎么解决。之后转战uWSGI+nginx，但最后的nginx error实在是让我束手无策…… httpd和nginx的错误日志里也没有显示什么，项目在开发环境中也没有问题……所以干脆放弃了，改用了Docker。</p>
 <h1 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h1><p>这点就不用详细说明什么了，正常安装就可以了。</p>

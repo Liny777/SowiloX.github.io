@@ -423,6 +423,37 @@ height:38.2vh;
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
             <main class="main post-page">
+    
+        
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            processEscapes: true
+          }
+        });
+      </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+            tex2jax: {
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+          });
+      </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+              var all = MathJax.Hub.getAllJax(), i;
+              for(i=0; i < all.length; i += 1) {
+                  all[i].SourceElement().parentNode.className += ' has-jax';
+              }
+          });
+      </script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
     <article class="article-entry">
         <p>今天给朋友找资料时，无意中翻出了当年写的Kruskal算法的实现代码。<del>说实话现在再看当年自己写的代码，已经看不懂了。</del>其中在判断选边之后会不会形成闭环回路时，用到了并查集，因为当时是现用现学的，所以还是有些生疏，今天又拿出来翻了翻。说真的，这个结构以及算法是真的简洁实用。</p>
 <h1 id="普通并查集"><a href="#普通并查集" class="headerlink" title="普通并查集"></a>普通并查集</h1><p>并查集，说白了就是一个数组（也可以是链表，但明显数组写起来更简洁），其内部元素构成一种树形结构。它可以用来判断两个元素是否属于同一个集合。那么如何判断？</p>

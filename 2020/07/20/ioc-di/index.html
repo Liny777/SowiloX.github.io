@@ -415,6 +415,7 @@ height:38.2vh;
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
             <main class="main post-page">
+    
     <article class="article-entry">
         <p>学Spring的时候，接触到两个比较重要的概念，一个是IoC（Inversion of Control），控制反转；一个是DI（Dependency Injection），依赖注入</p>
 <h1 id="工厂和单例解耦"><a href="#工厂和单例解耦" class="headerlink" title="工厂和单例解耦"></a>工厂和单例解耦</h1><p>在一个简易的后端项目中，处理三层架构最简单的方式自然就是视图层中new业务层的对象，业务层中又new持久化层的对象。但这样下来，耦合度很高，因为这样导致了编译时需要处理各类之间的依赖关系。一个最直接的解耦方式，就是利用读取配置文件，再进行反射，在运行时创建实例对象来取代new，这样能够剥离各层之间的依赖关系。</p>
