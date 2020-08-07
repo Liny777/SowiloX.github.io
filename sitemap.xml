@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://shixuan.me/about/index.html</loc>
+    
+    <lastmod>2020-08-07T01:17:01.924Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://shixuan.me/2020/01/01/happy-new-year/</loc>
     
     <lastmod>2020-07-30T09:25:40.398Z</lastmod>
@@ -82,13 +89,6 @@
     <loc>http://shixuan.me/links/index.html</loc>
     
     <lastmod>2020-04-12T14:33:14.648Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://shixuan.me/about/index.html</loc>
-    
-    <lastmod>2020-04-10T14:53:39.697Z</lastmod>
     
   </url>
   
