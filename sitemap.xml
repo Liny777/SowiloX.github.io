@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://shixuan.me/2020/07/10/maven/</loc>
+    
+    <lastmod>2020-08-08T08:30:39.424Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://shixuan.me/about/index.html</loc>
     
     <lastmod>2020-08-07T01:17:01.924Z</lastmod>
@@ -47,13 +54,6 @@
     <loc>http://shixuan.me/2020/02/29/disjoint-sets/</loc>
     
     <lastmod>2020-07-30T09:24:22.836Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://shixuan.me/2020/07/10/maven/</loc>
-    
-    <lastmod>2020-07-30T09:23:48.721Z</lastmod>
     
   </url>
   

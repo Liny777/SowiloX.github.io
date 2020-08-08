@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://shixuan.me/2020/07/10/maven/</loc>
+    <lastmod>2020-08-08</lastmod>
+  </url>
+  <url>
     <loc>http://shixuan.me/2020/01/01/happy-new-year/</loc>
     <lastmod>2020-07-30</lastmod>
   </url>
@@ -22,10 +26,6 @@
   </url>
   <url>
     <loc>http://shixuan.me/2020/02/29/disjoint-sets/</loc>
-    <lastmod>2020-07-30</lastmod>
-  </url>
-  <url>
-    <loc>http://shixuan.me/2020/07/10/maven/</loc>
     <lastmod>2020-07-30</lastmod>
   </url>
   <url>
